@@ -88,8 +88,18 @@ struct ContentView: View {
                 self.loginStatusMessage = "Failed login user: \(error)"
                 return
             }
+            
+            if let user = result {
+                if user.user.isEmailVerified {
+                    print("Email verified: \(user.user.isEmailVerified)")
+                }
+            }
+            
+            
             print("Successfully loged as a user: \(result?.user.uid ?? "")")
             
+            self.email = ""
+            self.password = ""
             self.loginStatusMessage = "Successfully loged as a user: \(result?.user.uid ?? "")"
         }
     }
@@ -104,6 +114,13 @@ struct ContentView: View {
             }
             print("Successfully created new user: \(result?.user.uid ?? "")")
             
+            if let user = result {
+                user.user.sendEmailVerification()
+                print("Email verified: \(user.user.isEmailVerified)")
+            }
+            
+            self.email = ""
+            self.password = ""
             self.loginStatusMessage = "Successfully created new user: \(result?.user.uid ?? "")"
         }
     }
